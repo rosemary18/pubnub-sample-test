@@ -2,7 +2,7 @@ import React from 'react'
 import { PubNubProvider } from 'pubnub-react'
 import Chat from './Chat'
 import PubNub from 'pubnub'
-import { LogBox } from 'react-native'
+import { LogBox, SafeAreaView } from 'react-native'
 
 const client = new PubNub({
   subscribeKey: 'sub-c-95cde252-a723-11eb-b1ae-be4e92e38e16',
@@ -14,7 +14,9 @@ LogBox.ignoreLogs(['Setting a timer '])
 function App (){
     return (
         <PubNubProvider client={client}>
-          <Chat />
+          <SafeAreaView style={{flex: 1}}>
+            <Chat />
+          </SafeAreaView>
         </PubNubProvider>
     )
 }

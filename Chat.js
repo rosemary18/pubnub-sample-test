@@ -1,6 +1,6 @@
 import { usePubNub } from 'pubnub-react';
 import React, {useState, useEffect} from 'react'
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native'
 
 
 export default function Chat(props) {
@@ -9,6 +9,7 @@ export default function Chat(props) {
     const [messages, addMessages] = useState([]);
     const [message, setMessage] = useState('');
     let scroll = "";
+    const MyID = pubnub.getUUID();
 
     const sendMessage = message => {
         if (message) {
@@ -25,7 +26,8 @@ export default function Chat(props) {
             const text = message.text || message;
             const obj = {
                 text,
-                time: time.getHours().toString().slice(-2) + ":" + time.getMinutes().toString().slice(-2)
+                time: time.getHours().toString().slice(-2) + ":" + time.getMinutes().toString().slice(-2),
+                publisher: event.publisher
             }
             addMessages(messages => [...messages, obj]);
             scroll.scrollToEnd();
@@ -43,9 +45,9 @@ export default function Chat(props) {
             <ScrollView style={{flex: 1, padding: 8}} ref={ref => scroll = ref} showsVerticalScrollIndicator={false}>
                 {
                     messages.map((msg, index) => (
-                        <View key={`keyIndex-${index}`} style={{marginTop: 4, marginBottom: index === messages.length - 1 ? 8 : 4, paddingHorizontal: 6, paddingTop: 4, backgroundColor: 'white', borderRadius: 8, alignSelf: 'flex-start'}}>
-                            <Text style={{fontSize: 12}}>{msg.text}</Text>
-                            <Text style={{fontSize: 7, textAlign: 'right', color: "grey", marginTop: 4, marginBottom: 4}}>{msg.time}</Text>
+                        <View key={`keyIndex-${index}`} style={{marginTop: 4, marginBottom: index === messages.length - 1 ? 8 : 4, paddingHorizontal: 6, paddingTop: 4, backgroundColor: 'white', borderRadius: 8, alignSelf: MyID === msg.publisher ? 'flex-end' : 'flex-start'}}>
+                            <Text style={{fontSize: 12, textAlign: MyID === msg.publisher ? 'right' : 'left'}}>{msg.text}</Text>
+                            <Text style={{fontSize: 7, textAlign: MyID === msg.publisher ? 'right' : 'left', color: "grey", marginTop: 4, marginBottom: 4}}>{msg.time}</Text>
                         </View>
                     ))
                 }
@@ -65,10 +67,16 @@ export default function Chat(props) {
                     onSubmitEditing={() => sendMessage(message)}
                     />
                 <TouchableOpacity 
-                    style={{height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 20, margin: 8, marginLeft: 0, backgroundColor: 'blue', paddingHorizontal: 16}}
+                    style={{height: 40, width: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 20, margin: 8, marginLeft: 0}}
                     onPress={() => sendMessage(message)}
                     >
-                    <Text style={{color: 'white'}}>SEND</Text>
+                    <Image 
+                        source={{uri: 'https://icons-for-free.com/iconfiles/png/512/send+icon-1320185654900887696.png'}}
+                        style={{
+                            height: 40, 
+                            width: 40
+                        }}
+                        />
                 </TouchableOpacity>
             </View>
         </View>
