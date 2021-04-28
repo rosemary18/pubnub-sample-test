@@ -1,8 +1,9 @@
+import 'react-native-gesture-handler';
 import React from 'react'
 import { PubNubProvider } from 'pubnub-react'
-import Chat from './Chat'
 import PubNub from 'pubnub'
 import { LogBox, SafeAreaView } from 'react-native'
+import RootNavigator from './src/navigations/RootNavigator';
 
 const client = new PubNub({
   subscribeKey: 'sub-c-95cde252-a723-11eb-b1ae-be4e92e38e16',
@@ -15,7 +16,7 @@ function App (){
     return (
         <PubNubProvider client={client}>
           <SafeAreaView style={{flex: 1}}>
-            <Chat />
+            <RootNavigator />
           </SafeAreaView>
         </PubNubProvider>
     )
