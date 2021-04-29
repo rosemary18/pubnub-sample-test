@@ -27,7 +27,7 @@ export default function Chat({route, props}) {
         const time = new Date(event.timetoken / 10000)
         const obj = {
             text: message.text,
-            time: time.getHours().toString().slice(-2) + ":" + time.getMinutes().toString().slice(-2),
+            time: ("0" + time.getHours().toString()).slice(-2) + ":" + ("0" + time.getMinutes().toString()).slice(-2),
             sender: message.sender
         }
         addMessages(messages => [...messages, obj]);

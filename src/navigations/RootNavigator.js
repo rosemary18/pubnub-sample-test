@@ -10,7 +10,20 @@ const Stack = createStackNavigator()
 
 export default function RootNavigator (){
     return (
-        <NavigationContainer>
+        <NavigationContainer linking={{
+            prefixes: ['pubnub://'],
+            config: {
+                screens: {
+                    OnBoarding: 'onboarding',
+                    Chat: {
+                        path: 'chat/:name',
+                        parse: {
+                            name: (name) => `${name}`,
+                        }
+                    }
+                }
+            }
+        }}>
             <Stack.Navigator>
                 
                 <Stack.Screen 
